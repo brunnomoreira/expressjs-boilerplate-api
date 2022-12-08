@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('./auth.route');
 const { NotFoundError } = require('../errors/types');
+const auth = require('./auth.route');
 
 function bootstrap(app) {
   router.use(auth.prefix, auth.router);
