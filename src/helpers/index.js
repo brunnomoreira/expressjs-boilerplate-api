@@ -1,0 +1,1 @@
+global.env = require('./env');
