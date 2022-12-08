@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('../src/helpers');
 
 module.exports = { 
   secret: env('JWT_SECRET'),
