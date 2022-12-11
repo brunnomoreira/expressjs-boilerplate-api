@@ -1,4 +1,4 @@
-const express = require('./express');
+const express = require('./express.loader');
 
 function bootstrap(app) {
     express.bootstrap(app);
