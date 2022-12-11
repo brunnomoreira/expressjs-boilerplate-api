@@ -1,6 +1,4 @@
-const { matchedData } = require('express-validator');
 const service = require('../services/auth.service');
-
 const { validate, auth: validator } = require('../validators/index');
 
 class AuthController {

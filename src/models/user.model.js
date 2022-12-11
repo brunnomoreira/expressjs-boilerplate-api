@@ -13,9 +13,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       email_verified_at: {
         type: DataTypes.DATE,
+        defaultValue: null
       },
       last_login_at: {
         type: DataTypes.DATE,
+        defaultValue: null
       },
       password: {
         type: DataTypes.STRING,

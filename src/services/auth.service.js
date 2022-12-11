@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User } = require('../models/index');
 const config = require('../../config');
+const events = require('../events');
 const ValidationError = require('../errors/types/ValidationError');
 
 class AuthService {
@@ -26,6 +27,8 @@ class AuthService {
       email: data.email,
       password: bcrypt.hashSync(data.password, parseInt(config.auth.passwordSaltRounds))
     });
+    
+    events.emitter.emit(events.types.user.registered, user);
 
     return await this.#responseWithToken(user);
   }
@@ -37,10 +40,11 @@ class AuthService {
       expiresIn: config.jwt.expiresIn
     });
 
-    await user.update({ last_login_at: new Date() });
     await user.createAccessToken({ token: accessToken });
 
     delete user.dataValues.password;
+    
+    events.emitter.emit(events.types.user.login, user);
 
     return {
       user,
