@@ -8,6 +8,8 @@ class AuthController {
     this.service = service;
     this.login = this.login.bind(this);
     this.register = this.register.bind(this);
+    this.me = this.me.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
   async login(req, res, next) {
@@ -24,6 +26,11 @@ class AuthController {
 
   async me(req, res, next) {
     res.send(req.user);
+  }
+
+  async logout(req, res, next) {
+    await req.accessToken.destroy();
+    res.send();
   }
 }
 

@@ -14,7 +14,7 @@ class AuthService {
     const user = await User.unscoped().findOne({ where: { email: data.email } });
 
     if (user && bcrypt.compareSync(data.password, user.password)) {
-      return this.#responseWithToken(user);
+      return await this.#responseWithToken(user);
     }
 
     throw new ValidationError("Invalid credentials");
@@ -27,15 +27,18 @@ class AuthService {
       password: bcrypt.hashSync(data.password, parseInt(config.auth.passwordSaltRounds))
     });
 
-    return this.#responseWithToken(user);
+    return await this.#responseWithToken(user);
   }
 
-  #responseWithToken(user) {
+  async #responseWithToken(user) {
     const accessToken = jwt.sign({
       uid: user.id
     }, config.jwt.secret, {
       expiresIn: config.jwt.expiresIn
     });
+
+    await user.update({ last_login_at: new Date() });
+    await user.createAccessToken({ token: accessToken });
 
     delete user.dataValues.password;
 

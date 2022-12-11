@@ -1,21 +1,24 @@
-module.exports = (sequelize, Sequelize) => {
-  return sequelize.define(
+module.exports = (sequelize, DataTypes) => {
+  const User = sequelize.define(
     'User',
     {
       name: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
       },
       email: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         unique: true
       },
       email_verified_at: {
-        type: Sequelize.DATE,
+        type: DataTypes.DATE,
+      },
+      last_login_at: {
+        type: DataTypes.DATE,
       },
       password: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false
       }
     },
@@ -33,4 +36,13 @@ module.exports = (sequelize, Sequelize) => {
       }
     }
   );
+
+  User.associate = function(models) {
+    User.hasMany(models.AccessToken, {
+      foreignKey: 'user_id',
+      as: 'accessTokens'
+    });
+  }
+
+  return User;
 };
